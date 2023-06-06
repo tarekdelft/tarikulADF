@@ -1,0 +1,9 @@
+{
+	"name": "tarikulADF",
+	"location": "australiasoutheast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "19d08474-a968-44ca-8709-52bf2d6ea3d6",
+		"tenantId": "2bc59860-194a-4ff5-b307-49682d5c9852"
+	}
+}

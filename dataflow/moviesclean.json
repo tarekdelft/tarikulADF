@@ -1,0 +1,50 @@
+{
+	"name": "moviesclean",
+	"properties": {
+		"description": "Cleaned version of the movies dataset",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "movieinput",
+						"type": "DatasetReference"
+					},
+					"name": "Movies"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "movieoutput",
+						"type": "DatasetReference"
+					},
+					"name": "cleanedmoviedata"
+				}
+			],
+			"transformations": [
+				{
+					"name": "YearReleased"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movieId as string,",
+				"          title as string,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Movies",
+				"Movies derive(Year = toInteger(trim(right(title,6), '()')),",
+				"          title = toString(left(title,length(title)-6))) ~> YearReleased",
+				"Movies sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['cleanedmoviefile'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> cleanedmoviedata"
+			]
+		}
+	}
+}
